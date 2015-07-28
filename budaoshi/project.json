@@ -12,6 +12,11 @@
 
     "jsList" : [
         "src/resource.js",
-        "src/app.js"
+        "src/app.js",
+        "src/test.js",
+        "src/controller.js",
+        "src/design.js",
+        "src/play.js",
+        "src/zhen.js"
     ]
 }

@@ -4,7 +4,7 @@ var HelloWorldLayer = cc.Layer.extend({
     ctor:function () {
         //////////////////////////////
         // 1. super init first
-        this._super();
+        this._super(cc.color(255, 0, 0, 255));
 
         /////////////////////////////
         // 2. add a menu item with "X" image, which is clicked to quit the program
