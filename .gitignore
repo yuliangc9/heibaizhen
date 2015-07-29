@@ -1,4 +1,9 @@
 .idea
 heibaizhen.iml
-budaoshi/frameworks
-budaoshi/tools
+
+budaoshi/*
+!budaoshi/src
+!budaoshi/res
+!budaoshi/index.html
+!budaoshi/main.js
+!budaoshi/project.json

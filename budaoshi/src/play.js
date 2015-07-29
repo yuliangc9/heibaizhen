@@ -16,10 +16,8 @@ var PlayLayer = cc.LayerColor.extend({
 
         var self = this;
 
-        console.dir(designedTemplate);
-
         this.zhen = new HeiBaiZhen(designedTemplate);
-        console.dir(this.zhen.zhen);
+
         this.zhen.placeNodes(self);
         this.zhen.draw(this.lineDrawer);
 

@@ -133,6 +133,7 @@ HeiBaiZhen.prototype.genTemplate = function()
         t[n].positionX = this.zhen[n].node.sprite.x;
         t[n].positionY = this.zhen[n].node.sprite.y;
         t[n].relate = this.zhen[n].relate;
+        t[n].node = null;
     }
 
     return t;
