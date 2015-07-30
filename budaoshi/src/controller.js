@@ -2,7 +2,8 @@
  * Created by chenyuliang01 on 2015/7/28.
  */
 
-var BASE_WIDTH_NUM = 10;
+var BASE_WIDTH_NUM = 7;
+var TOUCH_THRESHOLD = 15;
 
 /**
  * a black white node instance
@@ -76,6 +77,9 @@ BWNode.prototype.switchBW = function()
 BWNode.prototype.enableSelect = function(selectCb, moveCb)
 {
     var self = this;
+    var initTouchX = -1;
+    var initTouchY = -1;
+
     this.selectListener = cc.EventListener.create({
         event : cc.EventListener.TOUCH_ONE_BY_ONE,
         swallowTouches : true,
@@ -83,6 +87,9 @@ BWNode.prototype.enableSelect = function(selectCb, moveCb)
         {
             var pos = touch.getLocation();
             var target = event.getCurrentTarget();
+
+            initTouchX = pos.x;
+            initTouchY = pos.y;
 
             if (cc.rectContainsPoint(target.getBoundingBox(),pos))
             {
@@ -94,7 +101,18 @@ BWNode.prototype.enableSelect = function(selectCb, moveCb)
         onTouchMoved : function(touch, event)
         {
             var pos = touch.getLocation();
-            //self.moveTo(0, pos.x, pos.y);
+
+            if (self.isSelected)
+            {
+                if (pos.x - initTouchX < TOUCH_THRESHOLD &&
+                    initTouchX - pos.x < TOUCH_THRESHOLD &&
+                    pos.y - initTouchY < TOUCH_THRESHOLD &&
+                    initTouchY - pos.y < TOUCH_THRESHOLD)
+                {
+                    return;
+                }
+            }
+
             self.sprite.setPosition(pos);
             if (self.selectBackGround)
             {
@@ -136,7 +154,7 @@ BWNode.prototype.switchSelect = function()
         this.selectBackGround.attr({
             x : this.sprite.x,
             y : this.sprite.y,
-            scale  : this.scaleSize,
+            scale  : 0.5,
             rotation : 0
         });
         layer.addChild(this.selectBackGround, 0);

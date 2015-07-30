@@ -6,7 +6,7 @@ var PlayLayer = cc.LayerColor.extend({
     sprite:null,
     lineDrawer:null,
     zhen:null,
-    ctor:function () {
+    ctor:function (template) {
         //////////////////////////////
         // 1. super init first
         this._super(cc.color(255, 255, 255, 255));
@@ -16,7 +16,7 @@ var PlayLayer = cc.LayerColor.extend({
 
         var self = this;
 
-        this.zhen = new HeiBaiZhen(designedTemplate);
+        this.zhen = new HeiBaiZhen(template);
 
         this.zhen.placeNodes(self);
         this.zhen.draw(this.lineDrawer);
@@ -36,14 +36,27 @@ var PlayLayer = cc.LayerColor.extend({
             });
         });
 
+        var menu = new cc.Menu(
+            addBottomMenu(this, "返回", 0, function(){
+                cc.director.runScene(new IndexScene());
+            })
+        );
+        menu.setPosition(cc.p(0, 0));
+        this.addChild(menu);
+
         return true;
     }
 });
 
 var PlayScene = cc.Scene.extend({
+    playTemplate : null,
+    ctor:function(template) {
+        this._super();
+        this.playTemplate = template;
+    },
     onEnter:function () {
         this._super();
-        var layer = new PlayLayer();
+        var layer = new PlayLayer(this.playTemplate);
         this.addChild(layer);
     }
 });

@@ -17,6 +17,8 @@
         "src/controller.js",
         "src/design.js",
         "src/play.js",
-        "src/zhen.js"
+        "src/zhen.js",
+        "src/index.js",
+        "src/layout.js"
     ]
 }

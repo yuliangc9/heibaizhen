@@ -79,33 +79,15 @@ var DesignLayer = cc.LayerColor.extend({
 
         cc.eventManager.addListener(this.touchListener, back_sprite);
 
-        this.tryLabel = new cc.LabelTTF("开始", 'Times New Roman', 35);
-        // position the label on the center of the screen
-        this.tryLabel.x = size.width / 2;
-        this.tryLabel.y = this.tryLabel.height;
-        this.tryLabel.color = cc.color(0, 0, 0, 255);
-        // add the label as a child to this layer
-        this.addChild(this.tryLabel, 5);
-
-        this.tryListener = cc.EventListener.create({
-            event : cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches : true,
-            onTouchBegan : function(touch, event)
-            {
-                var pos = touch.getLocation();
-                var target = event.getCurrentTarget();
-
-                if (cc.rectContainsPoint(target.getBoundingBox(),pos))
-                {
-                    designedTemplate = self.zhen.genTemplate();
-                    cc.director.runScene(new PlayScene());
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        cc.eventManager.addListener(this.tryListener, this.tryLabel);
+        var menu = new cc.Menu(
+            addBottomMenu(this, "开始", 0, function(){
+                designedTemplate = self.zhen.genTemplate();
+                cc.log(JSON.stringify(designedTemplate));
+                cc.director.runScene(new PlayScene(designedTemplate));
+            })
+        );
+        menu.setPosition(cc.p(0, 0));
+        this.addChild(menu);
 
         return true;
     }
