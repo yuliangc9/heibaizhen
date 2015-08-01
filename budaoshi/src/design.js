@@ -10,7 +10,7 @@ var DesignLayer = cc.LayerColor.extend({
     zhen:null,
 
     drawLine:function () {
-        this.zhen.draw(this.lineDrawer);
+        this.zhen.draw(this.lineDrawer, true);
     },
     ctor:function () {
         this._super(cc.color(255, 255, 255, 255));

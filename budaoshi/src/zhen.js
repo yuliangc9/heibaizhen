@@ -92,8 +92,9 @@ HeiBaiZhen.prototype.isConnected = function(node1, node2)
 /**
  * draw zhen map
  * @param {cc.DrawNode} lineDrawer
+ * @param [whiteLine]
  */
-HeiBaiZhen.prototype.draw = function(lineDrawer)
+HeiBaiZhen.prototype.draw = function(lineDrawer, blackLine)
 {
     lineDrawer.clear();
     for (var n in this.zhen)
@@ -103,7 +104,7 @@ HeiBaiZhen.prototype.draw = function(lineDrawer)
             lineDrawer.drawSegment(
                 cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y),
                 cc.p(this.zhen[l].node.sprite.x, this.zhen[l].node.sprite.y),
-                3, cc.color(0,0,0,255));
+                3, blackLine ? cc.color(0,0,0,255) : cc.color(255,255,255,255));
         }
     }
 };

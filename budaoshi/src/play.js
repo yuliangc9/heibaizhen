@@ -7,16 +7,17 @@ var PlayLayer = cc.LayerColor.extend({
     sprite:null,
     lineDrawer:null,
     zhen:null,
+    fromDesign:null,
     addLight : function() {
 
     },
     deleteLight : function() {
 
     },
-    ctor:function (template) {
+    ctor:function (template, fromDesign) {
         //////////////////////////////
         // 1. super init first
-        this._super(cc.color(255, 255, 255, 255));
+        this._super(cc.color(255, 255, 255, 160));
 
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer);
@@ -87,7 +88,7 @@ var PlayLayer = cc.LayerColor.extend({
             addBottomMenu(this, "返回", -130, function(){
                 showDialogMenu(self,
                     [{
-                        content : "确定要放弃吗",
+                        content : "确定要放弃这张图吗",
                         style : "宋体",
                         size : 25,
                         color : cc.color(0,0,0,255),
@@ -110,7 +111,7 @@ var PlayLayer = cc.LayerColor.extend({
                         }
                     }]
                 );
-            }),
+            }, null, null, cc.color(255, 250, 250, 255)),
             addBottomMenu(this, "分享", 0, function(){
                 showDialogMenu(self,
                     [{
@@ -126,7 +127,7 @@ var PlayLayer = cc.LayerColor.extend({
                         color : cc.color(0,0,0,255),
                         height : 46
                     }], [{
-                        content : "分享",
+                        content : "确定",
                         color : cc.color(0,0,0,255),
                         x : 47,
                         needBg : true,
@@ -141,11 +142,11 @@ var PlayLayer = cc.LayerColor.extend({
                         }
                     }]
                 );
-            }, null, 45),
+            }, null, 45, cc.color(255, 255, 255, 255)),
             addBottomMenu(this, "重置", 130, function(){
                 stepCount = 0;
                 self.zhen.reset();
-            })
+            }, null, null, cc.color(255, 250, 250, 255))
         );
         menu.setPosition(cc.p(0, 0));
         this.addChild(menu);
@@ -156,13 +157,15 @@ var PlayLayer = cc.LayerColor.extend({
 
 var PlayScene = cc.Scene.extend({
     playTemplate : null,
-    ctor:function(template) {
+    fromDesign : null,
+    ctor:function(template, fromDesign) {
         this._super();
         this.playTemplate = template;
+        this.fromDesign = fromDesign;
     },
     onEnter:function () {
         this._super();
-        var layer = new PlayLayer(this.playTemplate);
+        var layer = new PlayLayer(this.playTemplate, this.fromDesign);
         this.addChild(layer);
     }
 });
