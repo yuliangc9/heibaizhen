@@ -2,6 +2,7 @@
  * Created by chenyuliang01 on 2015/7/28.
  */
 
+var stepCount = 0;
 var PlayLayer = cc.LayerColor.extend({
     sprite:null,
     lineDrawer:null,
@@ -33,15 +34,57 @@ var PlayLayer = cc.LayerColor.extend({
 
             node.enableSwitch(function()
             {
+                stepCount ++;
                 self.zhen.switchNode(node, self, function()
                 {
-                    self.setColor(cc.color(255, 255, 255, 255));
+                    showDialogMenu(self,
+                        [{
+                            content : "厉害！！",
+                            style : "宋体",
+                            size : 28,
+                            color : cc.color(0,0,0,255),
+                            height : 0
+                        },{
+                            content : "用" + stepCount + "步完成破解",
+                            style : "宋体",
+                            size : 25,
+                            color : cc.color(0,0,0,255),
+                            height : 46
+                        }], [{
+                            content : "炫耀",
+                            color : cc.color(255,0,0,255),
+                            x : 0,
+                            needBg : true,
+                            size : 32,
+                            cb : function(){
+
+                            }
+                        },{
+                            content : "重试",
+                            color : cc.color(0,0,0,255),
+                            x : -75,
+                            needBg : true,
+                            cb : function(dialog){
+                                stepCount = 0;
+                                self.zhen.reset();
+                                dialog.removeFromParent(true);
+                            }
+                        },{
+                            content : "下一关",
+                            color : cc.color(0,0,0,255),
+                            x : 90,
+                            needBg : true,
+                            cb : function(){
+                                cc.director.runScene(new PlayScene({}));
+                            }
+                        }]
+                    );
                 });
             });
         });
 
         var menu = new cc.Menu(
-            addBottomMenu(this, "返回", -120, function(){
+            addBottomMenu(this, "返回", -130, function(){
                 showDialogMenu(self,
                     [{
                         content : "确定要放弃吗",
@@ -99,7 +142,8 @@ var PlayLayer = cc.LayerColor.extend({
                     }]
                 );
             }, null, 45),
-            addBottomMenu(this, "重置", 120, function(){
+            addBottomMenu(this, "重置", 130, function(){
+                stepCount = 0;
                 self.zhen.reset();
             })
         );

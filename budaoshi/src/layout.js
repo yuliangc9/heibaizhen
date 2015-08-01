@@ -87,11 +87,11 @@ function showDialogMenu(layer, textList, menuList)
     //3. add menu list
     var itemList = [];
     menuList.forEach(function(m){
-        var menuLabel = new cc.LabelTTF(m.content, "微软雅黑", 30);
+        var menuLabel = new cc.LabelTTF(m.content, "微软雅黑", m.size ? m.size : 28);
         menuLabel.color = m.color;
 
         var menuItem = new cc.MenuItemLabel(menuLabel, m.cb.bind(this, dialogLayer), dialogBG);
-        menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 50));
+        menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 35 + menuLabel.height / 2));
 
         itemList.push(menuItem);
     });
