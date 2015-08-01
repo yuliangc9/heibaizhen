@@ -155,11 +155,52 @@ HeiBaiZhen.prototype.isFinished = function()
     return true;
 };
 
-HeiBaiZhen.prototype.switchNode = function(node)
+/**
+ * reset zhen
+ */
+HeiBaiZhen.prototype.reset = function()
 {
+    for (var n in this.zhen)
+    {
+        if (!this.zhen[n].node.isWhite)
+        {
+            this.zhen[n].node.switchBW();
+        }
+    }
+}
+
+/**
+ * change zhen state
+ * @param {BWNode} node
+ * @param layer
+ * @param finishCb
+ */
+HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
+{
+    var self = this;
+
     for (var n in this.zhen[node.flagid].relate)
     {
-        this.zhen[n].node.switchBW();
+        var photon = new cc.Sprite(res.Photon_png);
+        photon.attr({
+            x : node.sprite.x,
+            y : node.sprite.y,
+            scale : 1/20
+        });
+        layer.addChild(photon, 1);
+
+        photon.runAction(new cc.Sequence(
+            new cc.MoveTo(0.3, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
+            new cc.CallFunc(function(m){
+                self.zhen[m].node.switchBW();
+                if (self.isFinished())
+                {
+                    finishCb ? finishCb() : null;
+                }
+            }.bind(this, n), layer)
+        ));
+
+        //this.zhen[n].node.switchBW();
     }
 };
 

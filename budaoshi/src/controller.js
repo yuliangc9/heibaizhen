@@ -9,9 +9,10 @@ var TOUCH_THRESHOLD = 15;
  * a black white node instance
  * @constructor
  */
-function BWNode()
+function BWNode(notLigth)
 {
-    this.sprite = new cc.Sprite(res.WhiteNode_png);
+    this.notLigth = notLigth;
+    this.sprite = new cc.Sprite(notLigth ? res.WhiteNode_png : res.WhiteNodeLight_png);
     this.isWhite = true;
     this.isSelected = false;
     this.selectBackGround = null;
@@ -44,6 +45,10 @@ BWNode.prototype.enableSwitch = function(cb)
                 return true;
             }
             return false;
+        },
+        onTouchEnded : function(touch, event)
+        {
+            //cb ? cb(self) : null;
         }
     });
 
@@ -62,11 +67,9 @@ BWNode.prototype.switchBW = function()
     }
     else
     {
-        this.sprite.setTexture(res.WhiteNode_png);
+        this.sprite.setTexture(this.notLigth ? res.WhiteNode_png : res.WhiteNodeLight_png);
         this.isWhite = true;
     }
-
-    //TODO: update relate node color
 }
 
 /**
@@ -174,9 +177,15 @@ BWNode.prototype.place = function(layer, x, y, level)
         x : x,
         y : y,
         scale  : this.scaleSize,
-        rotation : 0
+        rotation : cc.random0To1() * 180
     });
-    layer.addChild(this.sprite, level ? level : 1);
+
+//    this.sprite.runAction(
+//        new cc.RepeatForever(
+//            new cc.RotateBy(0.5, 360)
+//        )
+//    );
+    layer.addChild(this.sprite, level ? level : 3);
 }
 
 BWNode.prototype.moveTo = function(t, x, y)

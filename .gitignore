@@ -7,3 +7,5 @@ budaoshi/*
 !budaoshi/index.html
 !budaoshi/main.js
 !budaoshi/project.json
+
+node_modules

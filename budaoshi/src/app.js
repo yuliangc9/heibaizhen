@@ -52,10 +52,11 @@ var HelloWorldLayer = cc.Layer.extend({
         });
         this.addChild(this.sprite, 0);
 
+        cc.log("nimei");
         this.sprite.runAction(
             cc.sequence(
-                cc.rotateTo(2, 0),
-                cc.scaleTo(2, 1, 1)
+                cc.rotateTo(2, 0)
+                //cc.scaleTo(2, 1, 1)
             )
         );
         helloLabel.runAction(

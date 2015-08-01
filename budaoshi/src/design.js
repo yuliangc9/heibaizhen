@@ -38,7 +38,7 @@ var DesignLayer = cc.LayerColor.extend({
             swallowTouches : true,
             onTouchBegan : function(touch)
             {
-                var n = new BWNode();
+                var n = new BWNode(true);
 
                 n.enableSelect(function(){
                     cc.log("get select %s", n.selectBackGround ? "true" : "false");
@@ -65,6 +65,9 @@ var DesignLayer = cc.LayerColor.extend({
                 }, function(x, y){
                     if (y > size.height - n.realHeight/2){
                         self.zhen.deleteNode(n);
+                        if (self.selectedNode == n){
+                            self.selectedNode = null;
+                        }
                         n.delete();
                     }
                     self.drawLine();
