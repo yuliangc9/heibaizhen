@@ -130,7 +130,9 @@ var PlayLayer = cc.LayerColor.extend({
                         color : cc.color(0,0,0,255),
                         x : 47,
                         needBg : true,
-                        cb : function(){}
+                        cb : function(){
+
+                        }
                     },{
                         content : "取消",
                         color : cc.color(0,0,0,255),

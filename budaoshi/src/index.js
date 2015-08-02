@@ -48,3 +48,5 @@ var IndexScene = cc.Scene.extend({
         this.addChild(layer);
     }
 });
+
+

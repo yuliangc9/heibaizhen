@@ -9,7 +9,9 @@ var res = {
     BackGround_png : "res/transparent.png",
     IndexBackGround_png : "res/index_bg.png",
     Photon_png : "res/guangzi.png",
-    Dialog_png : "res/dialog.png"
+    Dialog_png : "res/dialog.png",
+    Click_wav : "res/click.wav",
+    FireNode_png : "res/fire_node.png"
 };
 
 var g_resources = [];

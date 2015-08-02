@@ -16,7 +16,7 @@ function addCenterJumpMenu(layer, text, fontType, fontSize, height, onTouch)
 {
     var easyLabel = new cc.LabelTTF(text, fontType, fontSize);
     easyLabel.color = cc.color(0,0,0,255);
-    var easyItem = new cc.MenuItemLabel(easyLabel, onTouch, layer);
+    var easyItem = new SoundMenuItemLabel(easyLabel,onTouch,layer);
     easyItem.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/2 + height));
 
     return easyItem;
@@ -39,7 +39,7 @@ function addBottomMenu(layer, text, x, onTouch, fontType, fontSize)
 
     var easyLabel = new cc.LabelTTF(text, fontType, fontSize);
     easyLabel.color = cc.color(0,0,0,255);
-    var easyItem = new cc.MenuItemLabel(easyLabel, onTouch, layer);
+    var easyItem = new SoundMenuItemLabel(easyLabel, onTouch, layer);
     easyItem.setPosition(cc.p(cc.winSize.width/2 + x, 6 + easyLabel.height / 2));
 
     return easyItem;
@@ -89,8 +89,7 @@ function showDialogMenu(layer, textList, menuList)
     menuList.forEach(function(m){
         var menuLabel = new cc.LabelTTF(m.content, "微软雅黑", m.size ? m.size : 28);
         menuLabel.color = m.color;
-
-        var menuItem = new cc.MenuItemLabel(menuLabel, m.cb.bind(this, dialogLayer), dialogBG);
+        var menuItem = new SoundMenuItemLabel(menuLabel, m.cb.bind(this, dialogLayer), dialogBG);
         menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 35 + menuLabel.height / 2));
 
         itemList.push(menuItem);

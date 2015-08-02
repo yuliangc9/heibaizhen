@@ -39,7 +39,7 @@ var DesignLayer = cc.LayerColor.extend({
             onTouchBegan : function(touch)
             {
                 var n = new BWNode(true);
-
+                cc.audioEngine.playEffect(res.Click_wav,false);
                 n.enableSelect(function(){
                     cc.log("get select %s", n.selectBackGround ? "true" : "false");
                     if (n.selectBackGround){
