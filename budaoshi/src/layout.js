@@ -30,12 +30,14 @@ function addCenterJumpMenu(layer, text, fontType, fontSize, height, onTouch)
  * @param {Function} onTouch
  * @param {String} [fontType]
  * @param {String} [fontSize]
+ * @param {cc.color} [fontColor]
  * @returns {cc.MenuItemLabel}
  */
-function addBottomMenu(layer, text, x, onTouch, fontType, fontSize)
+function addBottomMenu(layer, text, x, onTouch, fontType, fontSize, fontColor)
 {
     fontType = fontType ? fontType : "微软雅黑";
     fontSize = fontSize ? fontSize : 35;
+    fontColor = fontColor ? fontColor : cc.color(0,0,0,255);
 
     var easyLabel = new cc.LabelTTF(text, fontType, fontSize);
     easyLabel.color = cc.color(0,0,0,255);
@@ -94,10 +96,10 @@ function showDialogMenu(layer, textList, menuList)
 
         itemList.push(menuItem);
     });
-    var dialogMenu = new cc.Menu();
-    dialogMenu.initWithItems(itemList);
+    var dialogMenu = cc.Menu.create.apply(cc.Menu, itemList);
+//    dialogMenu.initWithItems(itemList);
     dialogMenu.setPosition(cc.p(0, 0));
-    dialogBG.addChild(dialogMenu, 9);
+    dialogBG.addChild(dialogMenu);
 
     layer.addChild(dialogLayer, 5);
 }

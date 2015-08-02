@@ -147,20 +147,24 @@ BWNode.prototype.switchSelect = function()
 {
     if (this.selectBackGround)
     {
-        this.selectBackGround.removeFromParent(true);
+//        this.selectBackGround.removeFromParent(true);
+//          this.selectBackGround.removeFromParent(true);
         this.selectBackGround = null;
+        this.sprite.setTexture(res.WhiteNode_png);
     }
     else
     {
-        var layer = this.sprite.getParent();
-        this.selectBackGround = new cc.Sprite(res.Select_png);
-        this.selectBackGround.attr({
-            x : this.sprite.x,
-            y : this.sprite.y,
-            scale  : 0.5,
-            rotation : 0
-        });
-        layer.addChild(this.selectBackGround, 0);
+//        var layer = this.sprite.getParent();
+//        this.selectBackGround = new cc.Sprite(res.Select_png);
+//        this.selectBackGround.attr({
+//            x : this.sprite.x,
+//            y : this.sprite.y,
+//            scale  : 0.5,
+//            rotation : 0
+//        });
+//        layer.addChild(this.selectBackGround, 0);
+        this.selectBackGround = true;
+        this.sprite.setTexture(res.BlackNode_png);
     }
 }
 

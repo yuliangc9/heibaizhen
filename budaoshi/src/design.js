@@ -10,10 +10,10 @@ var DesignLayer = cc.LayerColor.extend({
     zhen:null,
 
     drawLine:function () {
-        this.zhen.draw(this.lineDrawer);
+        this.zhen.draw(this.lineDrawer, false);
     },
     ctor:function () {
-        this._super(cc.color(255, 255, 255, 255));
+        this._super(cc.color(88, 87, 86, 255));
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer);
 
@@ -40,6 +40,7 @@ var DesignLayer = cc.LayerColor.extend({
             {
                 var n = new BWNode(true);
                 cc.audioEngine.playEffect(res.Click_wav,false);
+                n.place(self, touch.getLocation().x, touch.getLocation().y);
                 n.enableSelect(function(){
                     cc.log("get select %s", n.selectBackGround ? "true" : "false");
                     if (n.selectBackGround){
@@ -72,7 +73,6 @@ var DesignLayer = cc.LayerColor.extend({
                     }
                     self.drawLine();
                 });
-                n.place(self, touch.getLocation().x, touch.getLocation().y);
 
                 self.zhen.addNode(n);
 
@@ -87,7 +87,7 @@ var DesignLayer = cc.LayerColor.extend({
                 designedTemplate = self.zhen.genTemplate();
                 cc.log(JSON.stringify(designedTemplate));
                 cc.director.runScene(new PlayScene(designedTemplate));
-            })
+            }, null, 40, cc.color(255, 255, 255, 255))
         );
         menu.setPosition(cc.p(0, 0));
         this.addChild(menu);
