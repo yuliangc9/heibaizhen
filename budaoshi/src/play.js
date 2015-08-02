@@ -17,7 +17,7 @@ var PlayLayer = cc.LayerColor.extend({
     ctor:function (template, fromDesign) {
         //////////////////////////////
         // 1. super init first
-        this._super(cc.color(255, 255, 255, 160));
+        this._super(cc.color(88, 87, 86, 255));
 
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer);

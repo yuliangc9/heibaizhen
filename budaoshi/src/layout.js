@@ -30,6 +30,7 @@ function addCenterJumpMenu(layer, text, fontType, fontSize, height, onTouch)
  * @param {Function} onTouch
  * @param {String} [fontType]
  * @param {String} [fontSize]
+ * @param {cc.color} [fontColor]
  * @returns {cc.MenuItemLabel}
  */
 function addBottomMenu(layer, text, x, onTouch, fontType, fontSize, fontColor)

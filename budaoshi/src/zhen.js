@@ -104,7 +104,7 @@ HeiBaiZhen.prototype.draw = function(lineDrawer, blackLine)
             lineDrawer.drawSegment(
                 cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y),
                 cc.p(this.zhen[l].node.sprite.x, this.zhen[l].node.sprite.y),
-                3, blackLine ? cc.color(0,0,0,255) : cc.color(255,255,255,255));
+                3, blackLine ? cc.color(0,0,0,255) : cc.color(160,160,160,255));
         }
     }
 };
@@ -153,6 +153,7 @@ HeiBaiZhen.prototype.isFinished = function()
             return false;
         }
     }
+
     return true;
 };
 
@@ -179,7 +180,8 @@ HeiBaiZhen.prototype.reset = function()
 HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
 {
     var self = this;
-
+    var finalCount = Object.keys(this.zhen[node.flagid].relate).length;
+    var currCount = 0;
     for (var n in this.zhen[node.flagid].relate)
     {
         var photon = new cc.Sprite(res.Photon_png);
@@ -194,7 +196,8 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
             new cc.MoveTo(0.3, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
             new cc.CallFunc(function(m){
                 self.zhen[m].node.switchBW();
-                if (self.isFinished())
+                currCount ++;
+                if (currCount == finalCount && self.isFinished())
                 {
                     finishCb ? finishCb() : null;
                 }
@@ -204,6 +207,11 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
         //this.zhen[n].node.switchBW();
     }
 };
+
+HeiBaiZhen.prototype.showFinish = function(layer)
+{
+
+}
 
 /**
  * gen a template depend on difficulty
