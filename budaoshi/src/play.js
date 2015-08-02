@@ -20,7 +20,7 @@ var PlayLayer = cc.LayerColor.extend({
         this._super(cc.color(88, 87, 86, 255));
 
         this.lineDrawer = new cc.DrawNode();
-        this.addChild(this.lineDrawer);
+        this.addChild(this.lineDrawer, 1);
 
         var self = this;
 

@@ -192,14 +192,21 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
         });
         layer.addChild(photon, 1);
 
+        var speedLen = Math.sqrt(Math.pow(node.sprite.x - this.zhen[n].node.sprite.x, 2) +
+            Math.pow(node.sprite.y - this.zhen[n].node.sprite.y, 2));
+        var speedTime = 0.3 * speedLen / 168;
+
         photon.runAction(new cc.Sequence(
-            new cc.MoveTo(0.3, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
+            new cc.MoveTo(speedTime, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
             new cc.CallFunc(function(m){
                 self.zhen[m].node.switchBW();
                 currCount ++;
                 if (currCount == finalCount && self.isFinished())
                 {
-                    finishCb ? finishCb() : null;
+                    self.showFinish(layer, function(){
+                        cc.log("finish cb call");
+                        finishCb ? finishCb() : null;
+                    });
                 }
             }.bind(this, n), layer)
         ));
@@ -208,9 +215,39 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
     }
 };
 
-HeiBaiZhen.prototype.showFinish = function(layer)
+HeiBaiZhen.prototype.showFinish = function(layer, finishCb)
 {
+    var finalCount = 0;
+    var currCount = 0;
+    for (var flag in this.zhen) {
+        var node = this.zhen[flag].node;
+        finalCount += Object.keys(this.zhen[node.flagid].relate).length;
+        for (var n in this.zhen[node.flagid].relate) {
+            var photon = new cc.Sprite(res.Photon_png);
+            photon.attr({
+                x: node.sprite.x,
+                y: node.sprite.y,
+                scale: 1 / 20
+            });
+            layer.addChild(photon, 1);
 
+            var speedLen = Math.sqrt(Math.pow(node.sprite.x - this.zhen[n].node.sprite.x, 2) +
+                Math.pow(node.sprite.y - this.zhen[n].node.sprite.y, 2));
+            var speedTime = 0.8 * speedLen / 168;
+
+            photon.runAction(new cc.Sequence(
+                new cc.MoveTo(speedTime, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
+                new cc.DelayTime(1),
+                new cc.CallFunc(function () {
+                    currCount++;
+                    if (currCount == finalCount) {
+                        cc.log("show end");
+                        finishCb ? finishCb() : null;
+                    }
+                }.bind(this), layer)
+            ));
+        }
+    }
 }
 
 /**

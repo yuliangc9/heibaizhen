@@ -51,7 +51,7 @@ function map_repeat(nodes) {
 }
 
 function choose_connection(nodes, cur_node, cb) {
-    var max_connection = Math.ceil(cur_node - 1);
+    var max_connection = Math.floor(cur_node);
 
     if (cur_node == nodes.length) {
         if (!map_repeat(nodes)) {
@@ -154,25 +154,37 @@ function disconnect_node(map, node1, node2) {
 
 //record the map has been reach
 var g_reached_record = new Array();
+var g_step_record = new Array();
 var best_step = -1;
+var best_train = null;
 
-function resolve_map(nodes, result, step) {
+function resolve_map(nodes, result, step/*, click_train*/) {
+    if (best_step != -1 && step >= best_step -1) {
+        return ;
+    }
     if (result == (1 << nodes.length) - 1) {
-        if (best_step == -1 || best_step > step) {
-            best_step = step;
+        //best_train = click_train;
+        best_step = step;
+        return 1;
+    }
+    if (g_reached_record[result] <= step) {
+        return ;
+    }
+    if (g_step_record[result]) {
+        if( g_step_record[result] + step < best_step) {
+            best_step = g_step_record[result] + step;
         }
-        return;
+        return g_step_record[result] + 1;
     }
-    if (best_step != -1 && step > best_step) {
-        return;
-    }
-    if (g_reached_record[result]) {
-        return;
-    }
-    g_reached_record[result] = true;
+    g_reached_record[result] = step;
 
+
+    var new_result;
+    var tmp = 0;
     for (var i = 0; i < nodes.length; i++) {
-        var new_result = result;
+        if (i == 6) continue;
+
+        new_result = result;
 
         new_result ^= 1 << i;
         for (var j = 0; j < nodes.length; j++) {
@@ -180,19 +192,36 @@ function resolve_map(nodes, result, step) {
                 new_result ^= 1 << j;
             }
         }
-
-        resolve_map(nodes, new_result, step + 1);
+        tmp = resolve_map(nodes, new_result, step + 1/*, click_train.concat(i)*/);
+        if(tmp){
+             g_step_record[result] = tmp;
+        }
     }
+    return g_step_record[result] ?  g_step_record[result] + 1 : 0;
 }
 
 var map_count = 0;
-gen_map(7, function (valid_map) {
+gen_map(6, function (valid_map) {
     console.log("get a map!! total: %d", ++map_count);
     console.dir(valid_map);
 
     console.log("caculate step...");
     resolve_map(valid_map, 0, 0);
     console.log("step need : %d", best_step);
+    console.dir(best_train);
     g_reached_record = new Array();
+    g_step_record = new Array();
     best_step = -1;
 });
+
+//var test_map = [ 
+//  [ 0, 1, 1, 1, 1, 1, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 1 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 0, 1, 0, 0, 0, 0, 0 ] ]
+//
+//resolve_map(test_map, 0, 0, new Array());
+//console.log(best_step);
