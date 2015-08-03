@@ -5,9 +5,10 @@
 /**
  * init a new zhen
  * @param [template] init with a template
+ * @param [initNotLight] whether need light
  * @constructor
  */
-function HeiBaiZhen(template)
+function HeiBaiZhen(template, initNotLight)
 {
     this.zhen = {
 //    flagid : {
@@ -24,7 +25,7 @@ function HeiBaiZhen(template)
         for (var n in template)
         {
             this.zhen[n] = template[n];
-            this.zhen[n].node = new BWNode();
+            this.zhen[n].node = new BWNode(initNotLight);
             this.zhen[n].node.flagid = n;
         }
     }
@@ -237,7 +238,7 @@ HeiBaiZhen.prototype.showFinish = function(layer, finishCb)
 
             photon.runAction(new cc.Sequence(
                 new cc.MoveTo(speedTime, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
-                new cc.DelayTime(1),
+                new cc.DelayTime(0.6),
                 new cc.CallFunc(function () {
                     currCount++;
                     if (currCount == finalCount) {

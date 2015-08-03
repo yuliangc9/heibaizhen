@@ -93,7 +93,7 @@ function showDialogMenu(layer, textList, menuList)
         menuLabel.color = m.color;
 
         var menuItem = new cc.MenuItemLabel(menuLabel, m.cb.bind(this, dialogLayer), dialogBG);
-        menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 35 + menuLabel.height / 2));
+        menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 30 + menuLabel.height / 2));
 
         itemList.push(menuItem);
     });

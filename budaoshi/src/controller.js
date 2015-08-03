@@ -119,7 +119,7 @@ BWNode.prototype.enableSelect = function(selectCb, moveCb)
             self.sprite.setPosition(pos);
             if (self.selectBackGround)
             {
-                self.selectBackGround.setPosition(pos);
+                //self.selectBackGround.setPosition(pos);
             }
 
             moveCb ? moveCb(pos.x, pos.y) : null;
@@ -210,7 +210,7 @@ BWNode.prototype.delete = function()
 
     if (this.selectBackGround)
     {
-        this.selectBackGround.removeFromParent(true);
+        //this.selectBackGround.removeFromParent(true);
         this.selectBackGround = null;
     }
 
