@@ -114,11 +114,50 @@ var DesignLayer = cc.LayerColor.extend({
                 x : 47,
                 needBg : true,
                 cb : function(){
-                    if (self.fromDesign) {
-                        cc.director.runScene((new DesignScene(self.zhen.genTemplate())));
-                    } else {
+                    cc.director.runScene(new IndexScene());
+                }
+            },{
+                content : "取消",
+                color : cc.color(0,0,0,255),
+                x : -47,
+                needBg : true,
+                cb : function(dialog){
+                    dialog.removeFromParent(true);
+                }
+            }]
+        );
+    },
+    showCheckInDialog : function()
+    {
+        var self = this;
+        showDialogMenu(self,
+            [{
+                content : "确定要录入这张图吗",
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : -10
+            },{
+                content : "最少步数为" + self.zhen.bestStep(),
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : 20
+            }], [{
+                content : "确定",
+                color : cc.color(0,0,0,255),
+                x : 47,
+                needBg : true,
+                cb : function(){
+                    var xmlhttp = new XMLHttpRequest();
+                    var url = "/map/insert?bestStep="+self.zhen.curBestStep;
+                    //url += "&struct=" + encodeURIComponent(JSON.stringify(self.zhen.genTemplate()));
+
+                    xmlhttp.onreadystatechange = function() {
                         cc.director.runScene(new IndexScene());
-                    }
+                    };
+                    xmlhttp.open("post", url, true);
+                    xmlhttp.send(JSON.stringify(self.zhen.genTemplate()));
                 }
             },{
                 content : "取消",
@@ -143,8 +182,8 @@ var DesignLayer = cc.LayerColor.extend({
                 designedTemplate = self.zhen.genTemplate();
                 cc.director.runScene(new PlayScene(self.zhen.genTemplate(), true));
             }, null, 45, cc.color(255, 255, 255, 255)),
-            addBottomMenu(this, "说明", 130, function(){
-                self.showExplainDialog();
+            addBottomMenu(this, monitorMode ? "导入":"说明", 130, function(){
+                monitorMode ? self.showCheckInDialog() : self.showExplainDialog();
             }, null, null, cc.color(255, 250, 250, 255))
         );
         menu.setPosition(cc.p(0, 0));

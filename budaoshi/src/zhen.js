@@ -33,6 +33,7 @@ function HeiBaiZhen(template, initNotLight)
     }
     this.currCount = 0;
     this.finalCount = 0;
+    this.curBestStep = 0;
 }
 
 /**
@@ -215,11 +216,79 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
                 }
             }.bind(this, n), layer)
         ));
-
-        //this.zhen[n].node.switchBW();
     }
 };
 
+HeiBaiZhen.prototype.bestStep = function()
+{
+    var nodeKeys = Object.keys(this.zhen);
+    var mapStruct = new Array(nodeKeys.length);
+    for (var j in nodeKeys){
+        mapStruct[j] = new Array(nodeKeys.length);
+        for (var k in nodeKeys){
+            mapStruct[j][k] = this.zhen[nodeKeys[j]].relate[nodeKeys[k]] ? 1 : 0;
+        }
+    }
+
+    console.dir(mapStruct);
+
+    var g_reached_record = new Array();
+    var g_step_record = new Array();
+    var best_step = -1;
+    var best_train = null;
+
+    function resolve_map(nodes, result, step/*, click_train*/) {
+        if (best_step != -1 && step >= best_step -1) {
+            return ;
+        }
+        if (result == (1 << nodes.length) - 1) {
+            //best_train = click_train;
+            best_step = step;
+            return 1;
+        }
+        if (g_reached_record[result] <= step) {
+            return ;
+        }
+        if (g_step_record[result]) {
+            if( g_step_record[result] + step < best_step) {
+                best_step = g_step_record[result] + step;
+            }
+            return g_step_record[result] + 1;
+        }
+        g_reached_record[result] = step;
+
+
+        var new_result;
+        var tmp = 0;
+        for (var i = 0; i < nodes.length; i++) {
+            if (i == 6) continue;
+
+            new_result = result;
+
+            new_result ^= 1 << i;
+            for (var j = 0; j < nodes.length; j++) {
+                if (nodes[i][j]) {
+                    new_result ^= 1 << j;
+                }
+            }
+            tmp = resolve_map(nodes, new_result, step + 1/*, click_train.concat(i)*/);
+            if(tmp){
+                g_step_record[result] = tmp;
+            }
+        }
+        return g_step_record[result] ?  g_step_record[result] + 1 : 0;
+    }
+
+    resolve_map(mapStruct, 0, 0);
+    this.curBestStep = best_step;
+    return best_step;
+};
+
+/**
+ * show finish celebration
+ * @param layer
+ * @param finishCb
+ */
 HeiBaiZhen.prototype.showFinish = function(layer, finishCb)
 {
     var finalCount = 0;

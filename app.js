@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var mapper = require('./routes/map_manager');
 
 var app = express();
 
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'budaoshi')));
 //app.use(express.static(path.join(__dirname, 'qiqi', 'html5')));
 
 app.use('/', routes);
-app.use('/map', users);
+app.use('/map', mapper);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

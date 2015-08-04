@@ -3,7 +3,7 @@
  */
 
 var BASE_WIDTH_NUM = 7;
-var TOUCH_THRESHOLD = 15;
+var TOUCH_THRESHOLD = 7;
 
 /**
  * a black white node instance
@@ -153,15 +153,6 @@ BWNode.prototype.switchSelect = function()
     }
     else
     {
-//        var layer = this.sprite.getParent();
-//        this.selectBackGround = new cc.Sprite(res.Select_png);
-//        this.selectBackGround.attr({
-//            x : this.sprite.x,
-//            y : this.sprite.y,
-//            scale  : 0.5,
-//            rotation : 0
-//        });
-//        layer.addChild(this.selectBackGround, 0);
         this.selectBackGround = true;
         this.sprite.setTexture(res.BlackNode_png);
     }
