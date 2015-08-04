@@ -19,6 +19,17 @@ var PlayLayer = cc.LayerColor.extend({
         // 1. super init first
         this._super(cc.color(88, 87, 86, 255));
 
+        //add background img
+        var size = cc.winSize;
+
+        this.sprite = new cc.Sprite(res.PlayBackGround_png);
+        this.sprite.attr({
+            x: size.width / 2,
+            y: size.height / 2,
+            scale: 0.8,
+            rotation: 0
+        });
+        this.addChild(this.sprite, 0);
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer);
 
