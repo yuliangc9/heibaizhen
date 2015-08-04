@@ -2,18 +2,14 @@
  * Created by chenyuliang01 on 2015/7/25.
  */
 
+var fs = require("fs");
+var path = require("path");
+
 //format : n-m => {...}, there are n nodes have m line
 var g_struct_record = {};
 
-/**
- * 判断一张图是否是重复的结构
- * @param nodes 图结构
- * @returns {boolean} 是否重复
- */
-function map_repeat(nodes) {
-    var is_repeat = true;
-
-    //1. 记录有n个连接的点有多少个
+function get_con_count_array(nodes)
+{
     var connect_count = new Array(nodes.length + 1);
     for (var i = 0; i < nodes.length + 1; i++) {
         connect_count[i] = 0;
@@ -29,6 +25,20 @@ function map_repeat(nodes) {
 
         connect_count[one_node_count] += 1;
     }
+
+    return connect_count;
+}
+
+/**
+ * 判断一张图是否是重复的结构
+ * @param nodes 图结构
+ * @returns {boolean} 是否重复
+ */
+function map_repeat(nodes) {
+    var is_repeat = true;
+
+    //1. 记录有n个连接的点有多少个
+    var connect_count = get_con_count_array(nodes);
 
     //2. 遍历整个点的连接情况，判断是否已经重复
     var cur_record = g_struct_record;
@@ -51,7 +61,9 @@ function map_repeat(nodes) {
 }
 
 function choose_connection(nodes, cur_node, cb) {
-    var max_connection = Math.ceil(cur_node - 1);
+    var max_connection = Math.ceil(cur_node/2);
+    if (max_connection >= cur_node)
+        max_connection = cur_node - 1;
 
     if (cur_node == nodes.length) {
         if (!map_repeat(nodes)) {
@@ -64,7 +76,7 @@ function choose_connection(nodes, cur_node, cb) {
 
     var points = new Array(max_connection);
     for (var i = 0; i < max_connection; i++) {
-        points[i] = 0;
+        points[i] = cur_node - 1;
     }
 
     function connect_points(flag) {
@@ -79,21 +91,21 @@ function choose_connection(nodes, cur_node, cb) {
         }
     }
 
-    while (points[0] < cur_node) {
+    while (points[0] >= 0) {
         connect_points(true);
         choose_connection(nodes, cur_node + 1, cb);
         connect_points(false);
 
         for (var flag = max_connection - 1; flag >= 0; flag--) {
-            if (points[flag] + 1 < cur_node) {
-                points[flag]++;
+            if (points[flag] > 0) {
+                points[flag]--;
                 for (var i = flag + 1; i < max_connection; i++) {
                     points[i] = points[flag];
                 }
                 break;
             }
             if (flag == 0) {
-                points[flag]++;
+                points[flag]--;
             }
         }
     }
@@ -154,25 +166,37 @@ function disconnect_node(map, node1, node2) {
 
 //record the map has been reach
 var g_reached_record = new Array();
+var g_step_record = new Array();
 var best_step = -1;
+var best_train = null;
 
-function resolve_map(nodes, result, step) {
+function resolve_map(nodes, result, step/*, click_train*/) {
+    if (best_step != -1 && step >= best_step -1) {
+        return ;
+    }
     if (result == (1 << nodes.length) - 1) {
-        if (best_step == -1 || best_step > step) {
-            best_step = step;
+        //best_train = click_train;
+        best_step = step;
+        return 1;
+    }
+    if (g_reached_record[result] <= step) {
+        return ;
+    }
+    if (g_step_record[result]) {
+        if( g_step_record[result] + step < best_step) {
+            best_step = g_step_record[result] + step;
         }
-        return;
+        return g_step_record[result] + 1;
     }
-    if (best_step != -1 && step > best_step) {
-        return;
-    }
-    if (g_reached_record[result]) {
-        return;
-    }
-    g_reached_record[result] = true;
+    g_reached_record[result] = step;
 
+
+    var new_result;
+    var tmp = 0;
     for (var i = 0; i < nodes.length; i++) {
-        var new_result = result;
+        if (i == 6) continue;
+
+        new_result = result;
 
         new_result ^= 1 << i;
         for (var j = 0; j < nodes.length; j++) {
@@ -180,19 +204,61 @@ function resolve_map(nodes, result, step) {
                 new_result ^= 1 << j;
             }
         }
-
-        resolve_map(nodes, new_result, step + 1);
+        tmp = resolve_map(nodes, new_result, step + 1/*, click_train.concat(i)*/);
+        if(tmp){
+             g_step_record[result] = tmp;
+        }
     }
+    return g_step_record[result] ?  g_step_record[result] + 1 : 0;
 }
 
 var map_count = 0;
-gen_map(7, function (valid_map) {
-    console.log("get a map!! total: %d", ++map_count);
-    console.dir(valid_map);
+//console.log(Number(process.argv[2]));
+gen_map(Number(process.argv[2]), function (valid_map) {
+    //console.log("get a map!! total: %d", ++map_count);
+    //console.dir(valid_map);
 
-    console.log("caculate step...");
+    //console.log("caculate step...");
     resolve_map(valid_map, 0, 0);
-    console.log("step need : %d", best_step);
+    //console.log("step need : %d", best_step);
+
+    if (best_step > Number(process.argv[2])/2 && best_step > 3){
+        fs.existsSync(""+best_step) || fs.mkdirSync(""+best_step);
+
+        var filename = process.argv[2] + "-";
+        var con_state = get_con_count_array(valid_map);
+        var con_sum = 0;
+        //con_state.forEach(function(t){con_sum+=t;});
+        filename += con_state.join("_");
+
+        filename = path.join(__dirname, ''+best_step, filename);
+
+        var map_string = "";
+        valid_map.forEach(function(line){
+            line.forEach(function(con){
+                map_string += con + " ";
+            });
+            map_string += "\n";
+        })
+        //console.log("step: " + best_step + "\n" +map_string);
+
+        fs.writeFileSync(filename, map_string);
+    }
+
+    //console.dir(best_train);
     g_reached_record = new Array();
+    g_step_record = new Array();
     best_step = -1;
 });
+
+//var test_map = [ 
+//  [ 0, 1, 1, 1, 1, 1, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 1 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 0, 1, 0, 0, 0, 0, 0 ] ]
+//
+//resolve_map(test_map, 0, 0, new Array());
+//console.log(best_step);
