@@ -17,7 +17,7 @@ var PlayLayer = cc.LayerColor.extend({
     ctor:function (template, fromDesign) {
         //////////////////////////////
         // 1. super init first
-        this._super(cc.color(88, 87, 86, 255));
+        this._super(cc.color(80, 79, 78, 255));
 
         this.fromDesign = fromDesign;
 
@@ -25,6 +25,13 @@ var PlayLayer = cc.LayerColor.extend({
         this.addChild(this.lineDrawer, 1);
 
         var self = this;
+
+        this.countLabel = new cc.LabelTTF("0", "Arial", 30);
+        // position the label on the center of the screen
+        this.countLabel.x = cc.winSize.width - 25;
+        this.countLabel.y = cc.winSize.height - 25;
+        // add the label as a child to this layer
+        this.addChild(this.countLabel, 9);
 
         this.zhen = new HeiBaiZhen(template);
 
@@ -38,6 +45,7 @@ var PlayLayer = cc.LayerColor.extend({
             node.enableSwitch(function()
             {
                 self.stepCount ++;
+                self.countLabel.setString("" + self.stepCount);
                 self.zhen.switchNode(node, self, function()
                 {
                     self.showFinishDialog();
@@ -45,6 +53,7 @@ var PlayLayer = cc.LayerColor.extend({
             });
         });
         this.drawBottomMenu();
+
         return true;
     },
     drawBottomMenu : function()
@@ -64,6 +73,7 @@ var PlayLayer = cc.LayerColor.extend({
             }, null, 45, cc.color(255, 255, 255, 255)),
             addBottomMenu(this, "重置", 130, function(){
                 self.stepCount = 0;
+                self.countLabel.setString("" + self.stepCount);
                 self.zhen.reset();
             }, null, null, cc.color(255, 250, 250, 255))
         );
@@ -103,6 +113,7 @@ var PlayLayer = cc.LayerColor.extend({
                 needBg : true,
                 cb : function(dialog){
                     self.stepCount = 0;
+                    self.countLabel.setString("" + self.stepCount);
                     self.zhen.reset();
                     dialog.removeFromParent(true);
                 }
@@ -112,7 +123,7 @@ var PlayLayer = cc.LayerColor.extend({
                 x : 100,
                 size : 25,
                 needBg : true,
-                cb : function(dialog){
+                cb : function(){
                     self.fromDesign ?
                         cc.director.runScene((new DesignScene(self.zhen.genTemplate()))) :
                         cc.director.runScene(new PlayScene({}));

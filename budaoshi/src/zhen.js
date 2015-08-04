@@ -12,6 +12,7 @@ function HeiBaiZhen(template, initNotLight)
 {
     this.zhen = {
 //    flagid : {
+//        isGood : false,
 //        node : BWNode,
 //        positionX : x,
 //        positionY : y,
@@ -27,8 +28,11 @@ function HeiBaiZhen(template, initNotLight)
             this.zhen[n] = template[n];
             this.zhen[n].node = new BWNode(initNotLight);
             this.zhen[n].node.flagid = n;
+            this.zhen[n].node.isGood = false;
         }
     }
+    this.currCount = 0;
+    this.finalCount = 0;
 }
 
 /**
@@ -39,7 +43,8 @@ HeiBaiZhen.prototype.addNode = function(node)
 {
     this.zhen[node.flagid] = {
         node : node,
-        relate : {}
+        relate : {},
+        isGood : false
     }
 };
 
@@ -181,8 +186,7 @@ HeiBaiZhen.prototype.reset = function()
 HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
 {
     var self = this;
-    var finalCount = Object.keys(this.zhen[node.flagid].relate).length;
-    var currCount = 0;
+    self.finalCount += Object.keys(this.zhen[node.flagid].relate).length;
     for (var n in this.zhen[node.flagid].relate)
     {
         var photon = new cc.Sprite(res.Photon_png);
@@ -195,14 +199,14 @@ HeiBaiZhen.prototype.switchNode = function(node, layer, finishCb)
 
         var speedLen = Math.sqrt(Math.pow(node.sprite.x - this.zhen[n].node.sprite.x, 2) +
             Math.pow(node.sprite.y - this.zhen[n].node.sprite.y, 2));
-        var speedTime = 0.3 * speedLen / 168;
+        var speedTime = 0.2 * speedLen / 168;
 
         photon.runAction(new cc.Sequence(
             new cc.MoveTo(speedTime, cc.p(this.zhen[n].node.sprite.x, this.zhen[n].node.sprite.y)),
             new cc.CallFunc(function(m){
                 self.zhen[m].node.switchBW();
-                currCount ++;
-                if (currCount == finalCount && self.isFinished())
+                self.currCount ++;
+                if (self.currCount == self.finalCount && self.isFinished())
                 {
                     self.showFinish(layer, function(){
                         cc.log("finish cb call");

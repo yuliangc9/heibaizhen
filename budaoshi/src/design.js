@@ -13,7 +13,7 @@ var DesignLayer = cc.LayerColor.extend({
         this.zhen.draw(this.lineDrawer, false);
     },
     ctor:function (template) {
-        this._super(cc.color(88, 87, 86, 255));
+        this._super(cc.color(80, 79, 78, 255));
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer);
 
@@ -70,7 +70,7 @@ var DesignLayer = cc.LayerColor.extend({
                 style : "宋体",
                 size : 25,
                 color : cc.color(0,0,0,255),
-                height : -30
+                height : -33
             },{
                 content : "拖动节点改变节点位置",
                 style : "宋体",
@@ -82,29 +82,20 @@ var DesignLayer = cc.LayerColor.extend({
                 style : "宋体",
                 size : 25,
                 color : cc.color(0,0,0,255),
-                height : 30
+                height : 33
             },{
-                content : "选择两个点建立连线",
+                content : "选择两个点可以建立连线",
                 style : "宋体",
                 size : 25,
                 color : cc.color(0,0,0,255),
-                height : 60
+                height : 66
             },{
                 content : "将点移到屏幕顶端可删除",
                 style : "宋体",
                 size : 25,
                 color : cc.color(0,0,0,255),
-                height : 90
-            }], [{
-                content : "确定",
-                color : cc.color(0,0,0,255),
-                x : 0,
-                needBg : true,
-                size : 25,
-                cb : function(dialog){
-                    dialog.removeFromParent(true);
-                }
-            }]
+                height : 99
+            }], [], true
         );
     },
     showQuitDialog : function()
