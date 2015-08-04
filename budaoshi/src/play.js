@@ -2,12 +2,12 @@
  * Created by chenyuliang01 on 2015/7/28.
  */
 
-var stepCount = 0;
 var PlayLayer = cc.LayerColor.extend({
     sprite:null,
     lineDrawer:null,
     zhen:null,
     fromDesign:null,
+    stepCount:0,
     addLight : function() {
 
     },
@@ -17,7 +17,9 @@ var PlayLayer = cc.LayerColor.extend({
     ctor:function (template, fromDesign) {
         //////////////////////////////
         // 1. super init first
-        this._super(cc.color(88, 87, 86, 255));
+        this._super(cc.color(80, 79, 78, 255));
+
+        this.fromDesign = fromDesign;
 
         //add background img
         var size = cc.winSize;
@@ -31,9 +33,16 @@ var PlayLayer = cc.LayerColor.extend({
         });
         this.addChild(this.sprite, 0);
         this.lineDrawer = new cc.DrawNode();
-        this.addChild(this.lineDrawer);
+        this.addChild(this.lineDrawer, 1);
 
         var self = this;
+
+        this.countLabel = new cc.LabelTTF("0", "Arial", 30);
+        // position the label on the center of the screen
+        this.countLabel.x = cc.winSize.width - 25;
+        this.countLabel.y = cc.winSize.height - 25;
+        // add the label as a child to this layer
+        this.addChild(this.countLabel, 9);
 
         this.zhen = new HeiBaiZhen(template);
 
@@ -46,125 +55,160 @@ var PlayLayer = cc.LayerColor.extend({
 
             node.enableSwitch(function()
             {
-                stepCount ++;
+                self.stepCount ++;
+                self.countLabel.setString("" + self.stepCount);
                 self.zhen.switchNode(node, self, function()
                 {
-                    showDialogMenu(self,
-                        [{
-                            content : "厉害！！",
-                            style : "宋体",
-                            size : 28,
-                            color : cc.color(0,0,0,255),
-                            height : 0
-                        },{
-                            content : "用" + stepCount + "步完成破解",
-                            style : "宋体",
-                            size : 25,
-                            color : cc.color(0,0,0,255),
-                            height : 46
-                        }], [{
-                            content : "炫耀",
-                            color : cc.color(255,0,0,255),
-                            x : 0,
-                            needBg : true,
-                            size : 32,
-                            cb : function(){
-
-                            }
-                        },{
-                            content : "重试",
-                            color : cc.color(0,0,0,255),
-                            x : -75,
-                            needBg : true,
-                            cb : function(dialog){
-                                stepCount = 0;
-                                self.zhen.reset();
-                                dialog.removeFromParent(true);
-                            }
-                        },{
-                            content : "下一关",
-                            color : cc.color(0,0,0,255),
-                            x : 90,
-                            needBg : true,
-                            cb : function(){
-                                cc.director.runScene(new PlayScene({}));
-                            }
-                        }]
-                    );
+                    self.showFinishDialog();
                 });
             });
         });
+        this.drawBottomMenu();
+
+        return true;
+    },
+    drawBottomMenu : function()
+    {
+        var self = this;
 
         var menu = new cc.Menu(
             addBottomMenu(this, "返回", -130, function(){
-                showDialogMenu(self,
-                    [{
-                        content : "确定要放弃这张图吗",
-                        style : "宋体",
-                        size : 25,
-                        color : cc.color(0,0,0,255),
-                        height : 0
-                    }], [{
-                        content : "确定",
-                        color : cc.color(0,0,0,255),
-                        x : 47,
-                        needBg : true,
-                        cb : function(){
-                            cc.director.runScene(new IndexScene());
-                        }
-                    },{
-                        content : "取消",
-                        color : cc.color(0,0,0,255),
-                        x : -47,
-                        needBg : true,
-                        cb : function(dialog){
-                            dialog.removeFromParent(true);
-                        }
-                    }]
-                );
+                if (self.fromDesign) {
+                    cc.director.runScene((new DesignScene(self.zhen.genTemplate())));
+                } else {
+                    self.showQuitDialog();
+                }
             }, null, null, cc.color(255, 250, 250, 255)),
             addBottomMenu(this, "分享", 0, function(){
-                showDialogMenu(self,
-                    [{
-                        content : "分享给朋友",
-                        style : "宋体",
-                        size : 25,
-                        color : cc.color(0,0,0,255),
-                        height : 0
-                    },{
-                        content : "一起解锁这张图",
-                        style : "宋体",
-                        size : 25,
-                        color : cc.color(0,0,0,255),
-                        height : 46
-                    }], [{
-                        content : "确定",
-                        color : cc.color(0,0,0,255),
-                        x : 47,
-                        needBg : true,
-                        cb : function(){
 
-                        }
-                    },{
-                        content : "取消",
-                        color : cc.color(0,0,0,255),
-                        x : -47,
-                        needBg : true,
-                        cb : function(dialog){
-                            dialog.removeFromParent(true);
-                        }
-                    }]
-                );
+                self.showShareDialog();
+
             }, null, 45, cc.color(255, 255, 255, 255)),
             addBottomMenu(this, "重置", 130, function(){
-                stepCount = 0;
+                self.stepCount = 0;
+                self.countLabel.setString("" + self.stepCount);
                 self.zhen.reset();
             }, null, null, cc.color(255, 250, 250, 255))
         );
         menu.setPosition(cc.p(0, 0));
         this.addChild(menu);
+    },
+    showFinishDialog : function()
+    {
+        var self = this;
+        showDialogMenu(self,
+            [{
+                content : "厉害！！",
+                style : "宋体",
+                size : 28,
+                color : cc.color(0,0,0,255),
+                height : 0
+            },{
+                content : "用" + self.stepCount + "步完成破解",
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : 46
+            }], [{
+                content : "炫耀",
+                color : cc.color(255,0,0,255),
+                x : 0,
+                needBg : true,
+                size : 32,
+                cb : function(){
 
-        return true;
+                }
+            },{
+                content : "重试",
+                color : cc.color(0,0,0,255),
+                x : -95,
+                size : 25,
+                needBg : true,
+                cb : function(dialog){
+                    self.stepCount = 0;
+                    self.countLabel.setString("" + self.stepCount);
+                    self.zhen.reset();
+                    dialog.removeFromParent(true);
+                }
+            },{
+                content : self.fromDesign ? "返回":"下一关",
+                color : cc.color(0,0,0,255),
+                x : 100,
+                size : 25,
+                needBg : true,
+                cb : function(){
+                    self.fromDesign ?
+                        cc.director.runScene((new DesignScene(self.zhen.genTemplate()))) :
+                        cc.director.runScene(new PlayScene({}));
+                }
+            }]
+        );
+    },
+    showShareDialog : function()
+    {
+        var self = this;
+        showDialogMenu(self,
+            [{
+                content : self.fromDesign ? "把自己设计的这张图" : "分享给朋友",
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : 0
+            },{
+                content : self.fromDesign ? "分享给朋友" : "一起解锁这张图",
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : 46
+            }], [{
+                content : "确定",
+                color : cc.color(0,0,0,255),
+                x : 47,
+                needBg : true,
+                cb : function(){}
+            },{
+                content : "取消",
+                color : cc.color(0,0,0,255),
+                x : -47,
+                needBg : true,
+                cb : function(dialog){
+                    dialog.removeFromParent(true);
+                }
+            }]
+        );
+    },
+    showQuitDialog : function()
+    {
+        var self = this;
+        showDialogMenu(self,
+            [{
+                content : "确定要放弃这张图吗",
+                style : "宋体",
+                size : 25,
+                color : cc.color(0,0,0,255),
+                height : 0
+            }], [{
+                content : "确定",
+                color : cc.color(0,0,0,255),
+                x : 47,
+                needBg : true,
+                cb : function(){
+                    if (self.fromDesign) {
+                        cc.director.runScene((new DesignScene(self.zhen.genTemplate())));
+                    } else {
+                        cc.director.runScene(new IndexScene());
+                    }
+                }
+            },{
+                content : "取消",
+                color : cc.color(0,0,0,255),
+                x : -47,
+                needBg : true,
+                cb : function(dialog){
+                    dialog.removeFromParent(true);
+                }
+            }]
+        );
     }
 });
 

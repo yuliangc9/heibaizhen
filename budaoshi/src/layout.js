@@ -52,8 +52,9 @@ function addBottomMenu(layer, text, x, onTouch, fontType, fontSize, fontColor)
  * @param layer
  * @param {Array} textList each text format is {content:,style:,size,color:,height}
  * @param {Array} menuList each menu format is {content:,size:,color:,bgColor:,cb:,x:}
+ * @param [touchDisappear] whether disappear when touch screen
  */
-function showDialogMenu(layer, textList, menuList)
+function showDialogMenu(layer, textList, menuList, touchDisappear)
 {
     //1. create back layer to cover main layer
     var dialogLayer = new cc.LayerColor(cc.color(0,0,0,120));
@@ -62,6 +63,10 @@ function showDialogMenu(layer, textList, menuList)
         swallowTouches : true,
         onTouchBegan : function(){
             return true;
+        },
+        onTouchEnded : function(){
+            if (touchDisappear)
+                dialogLayer.removeFromParent(true);
         }
     }), dialogLayer);
 
@@ -93,6 +98,7 @@ function showDialogMenu(layer, textList, menuList)
         menuLabel.color = m.color;
         var menuItem = new SoundMenuItemLabel(menuLabel, m.cb.bind(this, dialogLayer), dialogBG);
         menuItem.setPosition(cc.p(dialogBG.width/2 + m.x, 35 + menuLabel.height / 2));
+
 
         itemList.push(menuItem);
     });
