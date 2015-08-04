@@ -19,6 +19,7 @@
         "src/play.js",
         "src/zhen.js",
         "src/index.js",
-        "src/layout.js"
+        "src/layout.js",
+        "src/SoundMenuItemLabel.js"
     ]
 }

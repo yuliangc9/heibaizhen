@@ -21,6 +21,17 @@ var PlayLayer = cc.LayerColor.extend({
 
         this.fromDesign = fromDesign;
 
+        //add background img
+        var size = cc.winSize;
+
+        this.sprite = new cc.Sprite(res.PlayBackGround_png);
+        this.sprite.attr({
+            x: size.width / 2,
+            y: size.height / 2,
+            scale: 0.8,
+            rotation: 0
+        });
+        this.addChild(this.sprite, 0);
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer, 1);
 
@@ -69,7 +80,9 @@ var PlayLayer = cc.LayerColor.extend({
                 }
             }, null, null, cc.color(255, 250, 250, 255)),
             addBottomMenu(this, "分享", 0, function(){
+
                 self.showShareDialog();
+
             }, null, 45, cc.color(255, 255, 255, 255)),
             addBottomMenu(this, "重置", 130, function(){
                 self.stepCount = 0;

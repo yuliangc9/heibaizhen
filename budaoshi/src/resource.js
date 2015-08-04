@@ -9,7 +9,11 @@ var res = {
     BackGround_png : "res/transparent.png",
     IndexBackGround_png : "res/index_bg.png",
     Photon_png : "res/guangzi.png",
-    Dialog_png : "res/dialog.png"
+    Dialog_png : "res/dialog.png",
+    Click_wav : "res/click.wav",
+    FireNode_png : "res/fire_node.png",
+    Switch_mp3 : "res/switch.mp3",
+    PlayBackGround_png : "res/play_bg.jpg"
 };
 
 var monitorMode = true;

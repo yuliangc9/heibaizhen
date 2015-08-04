@@ -35,11 +35,13 @@ BWNode.prototype.enableSwitch = function(cb)
         swallowTouches : true,
         onTouchBegan : function(touch, event)
         {
+
             var pos = touch.getLocation();
             var target = event.getCurrentTarget();
 
             if (cc.rectContainsPoint(target.getBoundingBox(),pos))
             {
+                cc.audioEngine.playEffect(res.Switch_mp3,false);
                 self.switchBW();
                 cb ? cb(self) : null;
                 return true;
@@ -60,6 +62,7 @@ BWNode.prototype.enableSwitch = function(cb)
  */
 BWNode.prototype.switchBW = function()
 {
+
     if (this.isWhite)
     {
         this.sprite.setTexture(res.BlackNode_png);
@@ -148,6 +151,7 @@ BWNode.prototype.switchSelect = function()
     if (this.selectBackGround)
     {
 //        this.selectBackGround.removeFromParent(true);
+//          this.selectBackGround.removeFromParent(true);
         this.selectBackGround = null;
         this.sprite.setTexture(res.WhiteNode_png);
     }
