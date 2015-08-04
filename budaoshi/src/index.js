@@ -20,13 +20,13 @@ var IndexLayer = cc.LayerColor.extend({
         this.addChild(this.sprite, 0);
 
         var menu = new cc.Menu(
-            addCenterJumpMenu(this, "入门模式", '微软雅黑', 50, 130, function() {
+            addCenterJumpMenu(this, "开始游戏", '微软雅黑', 50, 100, function() {
                 cc.director.runScene(new PlayScene(HeiBaiZhen.genNewTemplate(0)));
             }),
-            addCenterJumpMenu(this, "高级模式", '微软雅黑', 50, 10, function() {
-                cc.director.runScene(new PlayScene(HeiBaiZhen.genNewTemplate(1)));
-            }),
-            addCenterJumpMenu(this, "自定义", '微软雅黑', 50, -110, function() {
+//            addCenterJumpMenu(this, "高级模式", '微软雅黑', 50, 10, function() {
+//                cc.director.runScene(new PlayScene(HeiBaiZhen.genNewTemplate(1)));
+//            }),
+            addCenterJumpMenu(this, "自定义", '微软雅黑', 50, -90, function() {
                 cc.director.runScene(new DesignScene());
             }),
             addBottomMenu(this, "退出", 0, function(){

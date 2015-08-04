@@ -20,6 +20,7 @@
         "src/zhen.js",
         "src/index.js",
         "src/layout.js",
+        "src/mapLib.js",
         "src/SoundMenuItemLabel.js"
     ]
 }

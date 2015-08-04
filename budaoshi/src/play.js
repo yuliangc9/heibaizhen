@@ -28,10 +28,11 @@ var PlayLayer = cc.LayerColor.extend({
         this.sprite.attr({
             x: size.width / 2,
             y: size.height / 2,
-            scale: 0.8,
+            scale: 2,
             rotation: 0
         });
         this.addChild(this.sprite, 0);
+
         this.lineDrawer = new cc.DrawNode();
         this.addChild(this.lineDrawer, 1);
 
@@ -98,7 +99,7 @@ var PlayLayer = cc.LayerColor.extend({
         var self = this;
         showDialogMenu(self,
             [{
-                content : "厉害！！",
+                content : self.zhen.bestStep ? "最快步数为" + self.zhen.bestStep : "厉害！！",
                 style : "宋体",
                 size : 28,
                 color : cc.color(0,0,0,255),
@@ -139,7 +140,7 @@ var PlayLayer = cc.LayerColor.extend({
                 cb : function(){
                     self.fromDesign ?
                         cc.director.runScene((new DesignScene(self.zhen.genTemplate()))) :
-                        cc.director.runScene(new PlayScene({}));
+                        cc.director.runScene(new PlayScene(HeiBaiZhen.genNewTemplate()));
                 }
             }]
         );

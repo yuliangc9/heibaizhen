@@ -21,8 +21,18 @@ function HeiBaiZhen(template, initNotLight)
 //        }
 //    }
     };
+
+    this.bestStep = 0;
+
     if (template)
     {
+        if (template.bestStep)
+        {
+            this.bestStep = template.bestStep;
+        }
+
+        delete template.bestStep;
+
         for (var n in template)
         {
             this.zhen[n] = template[n];
@@ -326,18 +336,17 @@ HeiBaiZhen.prototype.showFinish = function(layer, finishCb)
 
 /**
  * gen a template depend on difficulty
- * @param {Number} level bigger and more difficulty
+ * @param {Number} [level] bigger and more difficulty
  * @returns {*}
  */
 HeiBaiZhen.genNewTemplate = function(level)
 {
-    switch (level)
-    {
-        case 0:
-            return JSON.parse('{"1438270766519ts":{"positionX":101.12359550561797,"positionY":294.3820224719101,"relate":{"1438270767363ts":true}},"1438270767363ts":{"positionX":220.22471910112358,"positionY":465.1685393258427,"relate":{"1438270768477ts":true,"1438270766519ts":true}},"1438270768477ts":{"positionX":105.61797752808988,"positionY":588.7640449438202,"relate":{"1438270769014ts":true,"1438270767363ts":true}},"1438270769014ts":{"positionX":330.3370786516854,"positionY":638.2022471910112,"relate":{"1438270768477ts":true}}}');
-        case 1:
-            return JSON.parse('{"1438270894456ts":{"positionX":128.08988764044943,"positionY":591.0112359550561,"relate":{"1438270898719ts":true,"1438270897744ts":true}},"1438270895023ts":{"positionX":294.3820224719101,"positionY":485.39325842696627,"relate":{"1438270898719ts":true,"1438270897744ts":true,"1438270896372ts":true}},"1438270895703ts":{"positionX":74.15730337078652,"positionY":325.8426966292135,"relate":{"1438270896372ts":true,"1438270897744ts":true}},"1438270896372ts":{"positionX":325.8426966292135,"positionY":229.2134831460674,"relate":{"1438270895703ts":true,"1438270895023ts":true}},"1438270897744ts":{"positionX":202.24719101123594,"positionY":406.7415730337079,"relate":{"1438270895023ts":true,"1438270894456ts":true,"1438270895703ts":true}},"1438270898719ts":{"positionX":267.4157303370786,"positionY":689.8876404494382,"relate":{"1438270894456ts":true,"1438270895023ts":true}}}');
-        default:
-            return {};
-    }
+    var keys = Object.keys(gMapLib);
+    if (!HeiBaiZhen.startIndex)
+        HeiBaiZhen.startIndex = Math.floor(cc.random0To1() * keys.length);
+
+    if(HeiBaiZhen.startIndex == keys.length)
+        HeiBaiZhen.startIndex = 0;
+
+    return gMapLib[keys[HeiBaiZhen.startIndex++]];
 }

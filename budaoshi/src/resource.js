@@ -11,12 +11,11 @@ var res = {
     Photon_png : "res/guangzi.png",
     Dialog_png : "res/dialog.png",
     Click_wav : "res/click.wav",
-    FireNode_png : "res/fire_node.png",
     Switch_mp3 : "res/switch.mp3",
-    PlayBackGround_png : "res/play_bg.jpg"
+    PlayBackGround_png : "res/play_bg.png"
 };
 
-var monitorMode = true;
+var monitorMode = false;
 
 var g_resources = [];
 for (var i in res) {

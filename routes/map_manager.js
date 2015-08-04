@@ -37,7 +37,7 @@ router.post('/insert', function(req, res, next) {
 
         console.dir(mapStruct);
 
-        var file_name = path.join(mapdir, mapStruct.join("_"));
+        var file_name = path.join(mapdir, req.query.bestStep + "-" + mapStruct.join("_"));
         fs.writeFileSync(file_name, JSON.stringify(mapStructDict));
     });
   res.send('success');

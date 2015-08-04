@@ -48,10 +48,10 @@ var DesignLayer = cc.LayerColor.extend({
             swallowTouches : true,
             onTouchBegan : function(touch)
             {
-
-                var n = new BWNode(true);
                 cc.audioEngine.playEffect(res.Click_wav,false);
                 var n = self.addNode();
+                n.place(self, touch.getLocation().x, touch.getLocation().y);
+                self.zhen.addNode(n);
                 return true;
             }
         });

@@ -41,7 +41,6 @@ BWNode.prototype.enableSwitch = function(cb)
 
             if (cc.rectContainsPoint(target.getBoundingBox(),pos))
             {
-                cc.audioEngine.playEffect(res.Switch_mp3,false);
                 self.switchBW();
                 cb ? cb(self) : null;
                 return true;
@@ -62,9 +61,9 @@ BWNode.prototype.enableSwitch = function(cb)
  */
 BWNode.prototype.switchBW = function()
 {
-
     if (this.isWhite)
     {
+        cc.audioEngine.playEffect(res.Click_wav,false);
         this.sprite.setTexture(res.BlackNode_png);
         this.isWhite = false;
     }
