@@ -15,7 +15,7 @@ var res = {
     PlayBackGround_png : "res/play_bg.png"
 };
 
-var monitorMode = false;
+var monitorMode = true;
 
 var g_resources = [];
 for (var i in res) {

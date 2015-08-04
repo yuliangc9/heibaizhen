@@ -22,19 +22,21 @@ function HeiBaiZhen(template, initNotLight)
 //    }
     };
 
-    this.bestStep = 0;
+    this.curBestStep = 0;
 
     if (template)
     {
         if (template.bestStep)
         {
-            this.bestStep = template.bestStep;
+            this.curBestStep = template.bestStep;
         }
-
-        delete template.bestStep;
 
         for (var n in template)
         {
+            if (n == "bestStep") {
+                continue;
+            }
+
             this.zhen[n] = template[n];
             this.zhen[n].node = new BWNode(initNotLight);
             this.zhen[n].node.flagid = n;
@@ -240,8 +242,6 @@ HeiBaiZhen.prototype.bestStep = function()
         }
     }
 
-    console.dir(mapStruct);
-
     var g_reached_record = new Array();
     var g_step_record = new Array();
     var best_step = -1;
@@ -291,6 +291,7 @@ HeiBaiZhen.prototype.bestStep = function()
 
     resolve_map(mapStruct, 0, 0);
     this.curBestStep = best_step;
+    cc.log(best_step);
     return best_step;
 };
 

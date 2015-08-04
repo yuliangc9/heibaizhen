@@ -99,7 +99,7 @@ var PlayLayer = cc.LayerColor.extend({
         var self = this;
         showDialogMenu(self,
             [{
-                content : self.zhen.bestStep ? "最快步数为" + self.zhen.bestStep : "厉害！！",
+                content : self.zhen.bestStep ? "最快步数为" + self.zhen.curBestStep : "厉害！！",
                 style : "宋体",
                 size : 28,
                 color : cc.color(0,0,0,255),
