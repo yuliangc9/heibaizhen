@@ -48,7 +48,7 @@ var DesignLayer = cc.LayerColor.extend({
             swallowTouches : true,
             onTouchBegan : function(touch)
             {
-                cc.audioEngine.playEffect(res.Click_wav,false);
+                cc.audioEngine.playEffect(res.AddNode_sound,false);
                 var n = self.addNode();
                 n.place(self, touch.getLocation().x, touch.getLocation().y);
                 self.zhen.addNode(n);

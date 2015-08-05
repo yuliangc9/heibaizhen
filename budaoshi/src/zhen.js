@@ -45,7 +45,6 @@ function HeiBaiZhen(template, initNotLight)
     }
     this.currCount = 0;
     this.finalCount = 0;
-    this.curBestStep = 0;
 }
 
 /**

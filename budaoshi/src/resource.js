@@ -12,6 +12,10 @@ var res = {
     Dialog_png : "res/dialog.png",
     Click_wav : "res/click.wav",
     Switch_mp3 : "res/switch.mp3",
+    ToLight_sound : "res/toLight.mp3",
+    ToBlack_sound : "res/toBlack.mp3",
+    AddNode_sound : "res/addNode.mp3",
+    Button_sound : "res/button.mp3",
     PlayBackGround_png : "res/play_bg.png"
 };
 

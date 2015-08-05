@@ -63,12 +63,13 @@ BWNode.prototype.switchBW = function()
 {
     if (this.isWhite)
     {
-        cc.audioEngine.playEffect(res.Click_wav,false);
+        cc.audioEngine.playEffect(res.ToLight_sound,false);
         this.sprite.setTexture(res.BlackNode_png);
         this.isWhite = false;
     }
     else
     {
+        cc.audioEngine.playEffect(res.ToBlack_sound,false);
         this.sprite.setTexture(this.notLigth ? res.WhiteNode_png : res.WhiteNodeLight_png);
         this.isWhite = true;
     }
@@ -157,6 +158,7 @@ BWNode.prototype.switchSelect = function()
     else
     {
         this.selectBackGround = true;
+        cc.audioEngine.playEffect(res.AddNode_sound,false);
         this.sprite.setTexture(res.BlackNode_png);
     }
 }
