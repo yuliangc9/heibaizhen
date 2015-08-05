@@ -171,19 +171,20 @@ var best_step = -1;
 var best_train = null;
 
 function resolve_map(nodes, result, step/*, click_train*/) {
-    if (best_step != -1 && step >= best_step -1) {
-        return ;
-    }
     if (result == (1 << nodes.length) - 1) {
-        //best_train = click_train;
+        best_train = click_train;
         best_step = step;
         return 1;
+    }
+    if (best_step != -1 && step >= best_step -1) {
+        return ;
     }
     if (g_reached_record[result] <= step) {
         return ;
     }
     if (g_step_record[result]) {
         if( g_step_record[result] + step < best_step) {
+            best_train = click_train;
             best_step = g_step_record[result] + step;
         }
         return g_step_record[result] + 1;
@@ -194,7 +195,6 @@ function resolve_map(nodes, result, step/*, click_train*/) {
     var new_result;
     var tmp = 0;
     for (var i = 0; i < nodes.length; i++) {
-        if (i == 6) continue;
 
         new_result = result;
 
@@ -211,6 +211,21 @@ function resolve_map(nodes, result, step/*, click_train*/) {
     }
     return g_step_record[result] ?  g_step_record[result] + 1 : 0;
 }
+
+//var test_map = [
+//  [ 0, 1, 1, 1, 1, 0, 0 ],
+//  [ 1, 0, 0, 0, 0, 1, 1 ],
+//  [ 1, 0, 0, 0, 0, 1, 1 ],
+//  [ 1, 0, 0, 0, 0, 0, 1 ],
+//  [ 1, 0, 0, 0, 0, 0, 0 ],
+//  [ 0, 1, 1, 0, 0, 0, 1 ],
+//  [ 0, 1, 1, 1, 0, 1, 0 ]
+//]
+//
+//resolve_map(test_map, 0, 0, new Array());
+//console.log(best_step);
+//console.dir(best_train);
+//return;
 
 var map_count = 0;
 //console.log(Number(process.argv[2]));
@@ -250,15 +265,3 @@ gen_map(Number(process.argv[2]), function (valid_map) {
     g_step_record = new Array();
     best_step = -1;
 });
-
-//var test_map = [ 
-//  [ 0, 1, 1, 1, 1, 1, 0 ],
-//  [ 1, 0, 0, 0, 0, 0, 1 ],
-//  [ 1, 0, 0, 0, 0, 0, 0 ],
-//  [ 1, 0, 0, 0, 0, 0, 0 ],
-//  [ 1, 0, 0, 0, 0, 0, 0 ],
-//  [ 1, 0, 0, 0, 0, 0, 0 ],
-//  [ 0, 1, 0, 0, 0, 0, 0 ] ]
-//
-//resolve_map(test_map, 0, 0, new Array());
-//console.log(best_step);

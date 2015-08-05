@@ -53,6 +53,7 @@ cc.game.onStart = function(){
 
     // Pass true to enable retina display, disabled by default to improve performance
     cc.view.enableRetina(false);
+    cc.audioEngine.setEffectsVolume(1);
     // Adjust viewport meta
     cc.view.adjustViewPort(true);
     // Setup the resolution policy and design resolution size
