@@ -270,8 +270,6 @@ HeiBaiZhen.prototype.bestStep = function()
         var new_result;
         var tmp = 0;
         for (var i = 0; i < nodes.length; i++) {
-            if (i == 6) continue;
-
             new_result = result;
 
             new_result ^= 1 << i;
