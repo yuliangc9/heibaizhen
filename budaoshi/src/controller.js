@@ -12,7 +12,7 @@ var TOUCH_THRESHOLD = 7;
 function BWNode(notLigth)
 {
     this.notLigth = notLigth;
-    this.sprite = new cc.Sprite(notLigth ? res.WhiteNode_png : res.WhiteNodeLight_png);
+    this.sprite = new cc.Sprite(res.WhiteNodeLight_png);
     this.isWhite = true;
     this.isSelected = false;
     this.selectBackGround = null;
@@ -64,13 +64,13 @@ BWNode.prototype.switchBW = function()
     if (this.isWhite)
     {
         cc.audioEngine.playEffect(res.ToLight_sound,false);
-        this.sprite.setTexture(res.BlackNode_png);
+        this.sprite.setTexture(this.notLigth ? res.WhiteNode_png : res.BlackNode_png);
         this.isWhite = false;
     }
     else
     {
         cc.audioEngine.playEffect(res.ToBlack_sound,false);
-        this.sprite.setTexture(this.notLigth ? res.WhiteNode_png : res.WhiteNodeLight_png);
+        this.sprite.setTexture(res.WhiteNodeLight_png);
         this.isWhite = true;
     }
 }
@@ -150,16 +150,21 @@ BWNode.prototype.switchSelect = function()
 {
     if (this.selectBackGround)
     {
-//        this.selectBackGround.removeFromParent(true);
-//          this.selectBackGround.removeFromParent(true);
+
         this.selectBackGround = null;
-        this.sprite.setTexture(res.WhiteNode_png);
+        this.sprite.setTexture(
+            this.sprite.getTexture().url == res.BlackNode_png ?
+                res.WhiteNode_png : res.WhiteNodeLight_png);
+        cc.audioEngine.playEffect(res.ToBlack_sound,false);
     }
     else
     {
         this.selectBackGround = true;
-        cc.audioEngine.playEffect(res.AddNode_sound,false);
-        this.sprite.setTexture(res.BlackNode_png);
+        cc.audioEngine.playEffect(res.ToLight_sound,false);
+        cc.log(this.sprite.getTexture());
+        this.sprite.setTexture(
+                this.sprite.getTexture().url == res.WhiteNode_png ?
+                    res.BlackNode_png : res.BlackNodeLight_png);
     }
 }
 

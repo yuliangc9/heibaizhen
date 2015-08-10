@@ -13,6 +13,7 @@ function HeiBaiZhen(template, initNotLight)
     this.zhen = {
 //    flagid : {
 //        isGood : false,
+//        initIsGood : false,
 //        node : BWNode,
 //        positionX : x,
 //        positionY : y,
@@ -41,6 +42,10 @@ function HeiBaiZhen(template, initNotLight)
             this.zhen[n].node = new BWNode(initNotLight);
             this.zhen[n].node.flagid = n;
             this.zhen[n].node.isGood = false;
+
+            if (this.zhen[n].initIsGood) {
+                this.zhen[n].node.switchBW();
+            }
         }
     }
     this.currCount = 0;
@@ -152,6 +157,7 @@ HeiBaiZhen.prototype.genTemplate = function()
         t[n].positionX = this.zhen[n].node.sprite.x;
         t[n].positionY = this.zhen[n].node.sprite.y;
         t[n].relate = this.zhen[n].relate;
+        t[n].initIsGood = !this.zhen[n].node.isWhite;
         delete t[n].node;
     }
 
@@ -182,7 +188,8 @@ HeiBaiZhen.prototype.reset = function()
 {
     for (var n in this.zhen)
     {
-        if (!this.zhen[n].node.isWhite)
+        if ((!this.zhen[n].node.isWhite && !this.zhen[n].initIsGood) ||
+            (this.zhen[n].node.isWhite && this.zhen[n].initIsGood))
         {
             this.zhen[n].node.switchBW();
         }
@@ -234,7 +241,12 @@ HeiBaiZhen.prototype.bestStep = function()
 {
     var nodeKeys = Object.keys(this.zhen);
     var mapStruct = new Array(nodeKeys.length);
+    var initState = 0;
+
     for (var j in nodeKeys){
+        if (!this.zhen[nodeKeys[j]].node.isWhite){
+            initState |= 1 << j;
+        }
         mapStruct[j] = new Array(nodeKeys.length);
         for (var k in nodeKeys){
             mapStruct[j][k] = this.zhen[nodeKeys[j]].relate[nodeKeys[k]] ? 1 : 0;
@@ -266,7 +278,6 @@ HeiBaiZhen.prototype.bestStep = function()
         }
         g_reached_record[result] = step;
 
-
         var new_result;
         var tmp = 0;
         for (var i = 0; i < nodes.length; i++) {
@@ -286,7 +297,7 @@ HeiBaiZhen.prototype.bestStep = function()
         return g_step_record[result] ?  g_step_record[result] + 1 : 0;
     }
 
-    resolve_map(mapStruct, 0, 0);
+    resolve_map(mapStruct, initState, 0);
     this.curBestStep = best_step;
     cc.log(best_step);
     return best_step;

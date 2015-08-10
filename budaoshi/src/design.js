@@ -21,9 +21,13 @@ var DesignLayer = cc.LayerColor.extend({
 
         for (var existNode in this.zhen.zhen)
         {
-            this.zhen.zhen[existNode].node = this.addNode(
-                this.zhen.zhen[existNode].positionX, this.zhen.zhen[existNode].positionY);
+            this.zhen.zhen[existNode].node = this.addNode();
+                /*this.zhen.zhen[existNode].positionX, this.zhen.zhen[existNode].positionY*/
             this.zhen.zhen[existNode].node.flagid = existNode;
+
+            if (this.zhen.zhen[existNode].initIsGood) {
+                this.zhen.zhen[existNode].node.switchBW();
+            }
         }
 
         this.zhen.placeNodes(this);
@@ -67,35 +71,41 @@ var DesignLayer = cc.LayerColor.extend({
         var self = this;
         showDialogMenu(self,
             [{
+                content : "设计属于自己的阵形",
+                style : "宋体",
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 10
+            },{
                 content : "点击空白区域添加新节点",
                 style : "宋体",
-                size : 25,
-                color : cc.color(0,0,0,255),
-                height : -33
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 90
             },{
                 content : "拖动节点改变节点位置",
                 style : "宋体",
-                size : 25,
-                color : cc.color(0,0,0,255),
-                height : 0
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 190
             },{
-                content : "点击可以选中节点",
+                content : "点击可以选中节点，选择\n两个点可以建立或删除连线",
                 style : "宋体",
-                size : 25,
-                color : cc.color(0,0,0,255),
-                height : 33
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 300
             },{
-                content : "选择两个点可以建立连线",
+                content : "重复选择节点可改变\n节点的初始状态",
                 style : "宋体",
-                size : 25,
-                color : cc.color(0,0,0,255),
-                height : 66
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 400
             },{
-                content : "将点移到屏幕顶端可删除",
+                content : "将节点移到屏幕顶端可删除",
                 style : "宋体",
-                size : 25,
-                color : cc.color(0,0,0,255),
-                height : 99
+                size : 35,
+                color : cc.color(255,255,255,255),
+                height : 500
             }], [], true
         );
     },
@@ -139,7 +149,7 @@ var DesignLayer = cc.LayerColor.extend({
                 color : cc.color(0,0,0,255),
                 height : -10
             },{
-                content : "最少步数为" + self.zhen.bestStep(),
+                content : self.zhen.bestStep() == -1 ? '无解':"最少步数为" + self.zhen.curBestStep,
                 style : "宋体",
                 size : 25,
                 color : cc.color(0,0,0,255),
@@ -212,6 +222,7 @@ var DesignLayer = cc.LayerColor.extend({
             }else{
                 if (self.selectedNode == n){
                     self.selectedNode = null;
+                    n.switchBW();
                 }
             }
             self.drawLine();
