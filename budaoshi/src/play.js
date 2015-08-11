@@ -81,9 +81,7 @@ var PlayLayer = cc.LayerColor.extend({
                 }
             }, null, null, cc.color(255, 250, 250, 255)),
             addBottomMenu(this, "分享", 0, function(){
-
                 self.showShareDialog();
-
             }, null, 45, cc.color(255, 255, 255, 255)),
             addBottomMenu(this, "重置", 130, function(){
                 self.stepCount = 0;
@@ -166,7 +164,9 @@ var PlayLayer = cc.LayerColor.extend({
                 color : cc.color(0,0,0,255),
                 x : 47,
                 needBg : true,
-                cb : function(){}
+                cb : function(){
+                    jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showShare", "(Ljava/lang/String;)V", "来吧！");
+                }
             },{
                 content : "取消",
                 color : cc.color(0,0,0,255),
